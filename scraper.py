@@ -12,7 +12,7 @@ import logging,os
 import pymssql
 import configparser
 import pypyodbc as obdc
-
+from testing_models import run_main_model
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -57,8 +57,6 @@ profile = {'printing.print_preview_sticky_settings.appState': json.dumps(appStat
 
 
 chrome_options = Options()
-#chrome_options.add_argument("--headless")  
-#chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--disable-extensions")
 chrome_options.add_experimental_option('prefs', profile)
 chrome_options.add_argument('--kiosk-printing')
@@ -67,7 +65,6 @@ urls = []
 stock_company_data = pd.read_csv("constituents.csv")
 tickers = np.asarray(stock_company_data["Symbol"])
 print(tickers[:10])
-
 wait = WebDriverWait(driver, 10,poll_frequency=1) 
 
 
@@ -133,7 +130,6 @@ if(not dont_run_driver):
             cursor.execute("INSERT INTO scraping_schema.url_table (url, ticker, form_type, date_filed) VALUES (?, ?, ?, ?)",
             [entry_url, entry_ticker, entry_form_type, entry_date_filed])
             cnxn.commit()
-    
-
     driver.quit()
 print("FULLY DONE WITH EVERYTHING")
+
